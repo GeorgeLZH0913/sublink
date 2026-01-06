@@ -10,7 +10,8 @@ export function parseAnyTls(url) {
 	const [password, serverInfo] = addressPart.split("@");
 	const { host, port } = parseServerInfo(serverInfo);
 
-	const alpn = parseArray(params.alpn);
+	const alpn = parseArray(params.alpn) ?? [];
+
 	const insecure = parseBool(
 		params["skip-cert-verify"] ?? params.insecure ?? params.allowInsecure,
 		true,
@@ -20,7 +21,7 @@ export function parseAnyTls(url) {
 		enabled: true,
 		server_name: params.sni,
 		insecure: insecure,
-		alpn: alpn,
+		alpn: alpn.length ? alpn : undefined,
 	};
 
 	if (params["client-fingerprint"]) {
